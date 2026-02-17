@@ -83,6 +83,7 @@ Iniziamo creando un workflow per compilare e pubblicare il nostro gioco **Stacko
              registry: ghcr.io
              username: {% raw %}${{ github.actor }}{% endraw %}
              password: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+
          - name: Build and push Docker image
            run: |
              docker build . --tag ghcr.io/{{ full_repo_name | lower }}/stackoverflown:main

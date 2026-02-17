@@ -18,7 +18,7 @@ jobs:
     if: github.actor != 'github-classroom[bot]'
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Check if docker-publish.yml exists
       id: check_file
@@ -61,6 +61,17 @@ jobs:
         command: 'grep "docker/build-push-action" .github/workflows/docker-publish.yml'
         input: ''
         expected-output: 'docker/build-push-action'
+        comparison-method: 'contains'
+        max-score: 1
+
+    - name: Check for stackoverflown.png file
+      id: check_stackoverflown
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: 'Check for stackoverflown.png file'
+        command: 'ls stackoverflown.png'
+        input: ''
+        expected-output: 'stackoverflown.png'
         comparison-method: 'contains'
         max-score: 1
 

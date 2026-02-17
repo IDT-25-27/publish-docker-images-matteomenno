@@ -50,7 +50,9 @@ Facciamo il pull di quell'immagine ed eseguiamola nel tuo codespace per vedere i
    <img width="600" alt="Image showing the ports tab" src="https://github.com/user-attachments/assets/80944d79-898a-43f9-94a0-6a9cc153f38d" />
 
 
-   > ✨ Fai uno screenshot del gioco in esecuzione, salvalo come stackoverflown.png e aggiungilo al repository
+   > ✨ Fai uno screenshot del gioco in esecuzione, salvalo sul tuo computer e aggiungilo al repository.
+
+1. Salva uno screenshot del gioco in esecuzione, caricalo come `stackoverflown.png` nel repository.
 
 1. Puoi fermare l'esecuzione dell'applicazione premendo `Ctrl + C` nel terminale
 
@@ -62,28 +64,30 @@ Facciamo il pull di quell'immagine ed eseguiamola nel tuo codespace per vedere i
 Modifichiamo il workflow per usare le azioni Docker ufficiali per un processo di build più robusto e ricco di funzionalità.
 
 1. Apri il file `.github/workflows/docker-publish.yml`.
-1. Rimuovi lo step esistente `Build and push Docker image` con i comandi `docker`. Lo sostituiremo con altre Actions open source.
+1. Rimuovi dalla riga 23 in poi lo step esistente `Build and push Docker image` con i comandi `docker`. Lo sostituiremo con altre Actions open source.
 
     > ❗ **Attenzione:** Rimuovi solo lo step `Build and push Docker image`. **Non** rimuovere gli step con le Actions `actions/checkout` e `docker/login-action`.
 
-   Ora, aggiungi questi tre step seguenti al posto dello step `Build and push Docker image` che hai appena rimosso.
+   Ora, aggiungi *ben indentati* questi tre step seguenti al posto dello step `Build and push Docker image`.
 
    Questi step imposteranno QEMU per build multi-architettura, imposteranno Docker Buildx, e poi compileranno e invieranno l'immagine Docker con due tag diversi.
 
    ```yaml
-   - name: Set up QEMU
-     uses: docker/setup-qemu-action@v3
-   - name: Set up Docker Buildx
-     uses: docker/setup-buildx-action@v3
-   - name: Build and push Docker image
-     uses: docker/build-push-action@v6
-     with:
-       context: .
-       push: true
-       platforms: linux/amd64,linux/arm64
-       tags: |
-         ghcr.io/{{ full_repo_name | lower }}/stackoverflown:main
-         ghcr.io/{{ full_repo_name | lower }}/stackoverflown:{% raw %}${{ github.sha }}{% endraw %}
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v3
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v3
+
+        - name: Build and push Docker image
+          uses: docker/build-push-action@v6
+          with:
+            context: .
+            push: true
+            platforms: linux/amd64,linux/arm64
+            tags: |
+              ghcr.io/{{ full_repo_name | lower }}/stackoverflown:main
+              ghcr.io/{{ full_repo_name | lower }}/stackoverflown:{% raw %}${{ github.sha }}{% endraw %}
    ```
 
    Assicurati che l'indentazione yaml sia impostata correttamente!
@@ -118,10 +122,13 @@ Modifichiamo il workflow per usare le azioni Docker ufficiali per un processo di
               registry: ghcr.io
               username: {% raw %}${{ github.actor }}{% endraw %}
               password: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+
           - name: Set up QEMU
             uses: docker/setup-qemu-action@v3
+
           - name: Set up Docker Buildx
             uses: docker/setup-buildx-action@v3
+
           - name: Build and push Docker image
             uses: docker/build-push-action@v6
             with:

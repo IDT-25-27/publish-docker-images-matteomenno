@@ -48,27 +48,27 @@ Aggiorniamo il nostro workflow per supportare trigger multipli e usare l'Action 
 
 1. Aggiungi uno step per estrarre i metadati per le immagini Docker
 
-    ❗️ Posizionalo prima dello step `docker/build-push-action`.
+    ❗️ Posizionalo prima dello step "Build and push Docker image" con `docker/build-push-action`.
 
-    ```yaml
-    - name: Extract metadata for Docker
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ghcr.io/{{ full_repo_name | lower }}/stackoverflown
-    ```
+  ```yaml
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/{{ full_repo_name | lower }}/stackoverflown
+  ```
 
 1. Aggiorna lo step `docker/build-push-action` per usare i tag generati.
 
-   ```yaml
-   - name: Build and push Docker image
-     uses: docker/build-push-action@v5
-     with:
-       context: .
-       push: true
-       platforms: linux/amd64,linux/arm64
-       tags: {% raw %}${{ steps.meta.outputs.tags }}{% endraw %}
-   ```
+  ```yaml
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: {% raw %}${{ steps.meta.outputs.tags }}{% endraw %}
+  ```
 
     Assicurati che l'indentazione yaml sia impostata correttamente!
 
