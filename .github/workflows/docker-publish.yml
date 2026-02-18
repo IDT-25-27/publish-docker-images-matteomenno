@@ -1,5 +1,4 @@
 name: Docker Publish
-
 on:
   push:
     branches:
@@ -33,6 +32,12 @@ jobs:
 
       - name: Extract metadata for Docker
         id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/idt-25-27/publish-docker-images-matteomenno/stackoverflown
+
+      - name: Extract metadata for Docker
+        id: beta
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/idt-25-27/publish-docker-images-matteomenno/stackoverflown
